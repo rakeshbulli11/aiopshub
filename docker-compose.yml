@@ -1,0 +1,26 @@
+services:
+
+  db:
+    image: postgres:18
+    container_name: aiopshub-db
+    environment:
+      POSTGRES_DB: aiopshub
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: REMOVED_SECRET
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+  backend:
+    build: ./backend
+    container_name: aiopshub-backend
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://postgres:REMOVED_SECRET@db:5432/aiopshub
+
+volumes:
+  postgres_data:
