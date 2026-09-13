@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import PlainTextResponse
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from datetime import datetime
@@ -286,6 +287,7 @@ def resolve_incident(
         "status": incident.status,
         "resolved_at": incident.resolved_at
     }
+
 @app.get("/ai-analysis")
 def get_ai_analysis(db: Session = Depends(get_db)):
     latest_metric = (
@@ -333,3 +335,27 @@ def create_test_incident(db: Session = Depends(get_db)):
         "severity": incident.severity,
         "status": incident.status
     }
+@app.get("/prometheus", response_class=PlainTextResponse)
+def prometheus_metrics():
+    data = get_system_metrics()
+
+    return f"""# HELP aiopshub_up Whether the AIOpsHub backend is running
+# TYPE aiopshub_up gauge
+aiopshub_up 1
+
+# HELP aiopshub_cpu_usage CPU usage percentage
+# TYPE aiopshub_cpu_usage gauge
+aiopshub_cpu_usage {data["cpu_usage"]}
+
+# HELP aiopshub_memory_usage Memory usage percentage
+# TYPE aiopshub_memory_usage gauge
+aiopshub_memory_usage {data["memory_usage"]}
+
+# HELP aiopshub_disk_usage Disk usage percentage
+# TYPE aiopshub_disk_usage gauge
+aiopshub_disk_usage {data["disk_usage"]}
+
+# HELP aiopshub_network_usage Network usage in MB
+# TYPE aiopshub_network_usage gauge
+aiopshub_network_usage {data["network_usage"]}
+"""
