@@ -1,0 +1,163 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+  color: #1f2937;
+}
+
+.dashboard {
+  min-height: 100vh;
+}
+
+.header {
+  background: #111827;
+  color: white;
+  padding: 20px 40px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.header p {
+  margin: 6px 0 0;
+  color: #d1d5db;
+}
+
+.container {
+  padding: 30px 40px;
+}
+
+.section-title {
+  margin-bottom: 20px;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.card h3 {
+  margin-top: 0;
+  color: #6b7280;
+}
+
+.metric-value {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.server-section {
+  margin-top: 30px;
+}
+
+.status-online {
+  color: green;
+  font-weight: bold;
+}
+
+.incident {
+  border-left: 5px solid #dc2626;
+  margin-top: 15px;
+}
+
+.incident-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.high {
+  color: #dc2626;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .container {
+    padding: 20px;
+  }
+
+  .header {
+    padding: 20px;
+  }
+}
+.collect-button {
+  padding: 12px 20px;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.collect-button:hover {
+  background: #1d4ed8;
+}
+.resolve-button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  background: #16a34a;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.resolve-button:hover {
+  background: #15803d;
+}
+.deployment-status {
+  color: #16a34a;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.deployment-card {
+  margin-top: 15px;
+  border-left: 5px solid #2563eb;
+}
+.metric-status {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.metric-status.normal {
+  color: #16a34a;
+}
+
+.metric-status.warning {
+  color: #d97706;
+}
+
+.metric-status.critical {
+  color: #dc2626;
+}
+
+.deployment-status {
+  color: #16a34a;
+  font-weight: bold;
+}
+
+.deployment-card {
+  margin-top: 15px;
+  border-left: 5px solid #2563eb;
+}
