@@ -1,0 +1,5 @@
+AIOpsHub Terraform Test
+
+Project: AIOpsHub
+Environment: development
+Purpose: Terraform learning and validation
