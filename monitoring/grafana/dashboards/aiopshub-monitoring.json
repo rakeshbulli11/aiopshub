@@ -724,3 +724,23 @@
     }
   }
 }
+## Screenshots
+
+### AIOpsHub Frontend
+
+#### Dashboard Overview
+![AIOpsHub Frontend - Overview](docs/screenshots/frontend-1.png)
+
+#### System Metrics
+![AIOpsHub Frontend - System Metrics](docs/screenshots/frontend-2.png)
+
+#### AI Analysis and Incidents
+![AIOpsHub Frontend - AI Analysis and Incidents](docs/screenshots/frontend-3.png)
+
+### Grafana Monitoring
+
+#### Monitoring Dashboard
+![AIOpsHub Grafana - Monitoring](docs/screenshots/grafana-1.png)
+
+#### Monitoring and Alerts
+![AIOpsHub Grafana - Alerts](docs/screenshots/grafana-2.png)
