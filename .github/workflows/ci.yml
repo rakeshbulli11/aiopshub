@@ -48,3 +48,22 @@ jobs:
           exit-code: "0"
           ignore-unfixed: true
           severity: CRITICAL,HIGH
+
+      - name: Log in to Docker Hub
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Tag Docker image
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          docker tag aiopshub-backend:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/aiopshub-backend:${{ github.sha }}
+          docker tag aiopshub-backend:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/aiopshub-backend:latest
+
+      - name: Push Docker image
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/aiopshub-backend:${{ github.sha }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/aiopshub-backend:latest
