@@ -1,0 +1,41 @@
+name: AIOpsHub Rollback
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Docker image version to deploy"
+        required: true
+        default: "v1.1.0"
+        type: string
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Pull selected image
+        run: |
+          docker pull rakeshbulli/aiopshub-backend:${{ inputs.version }}
+
+      - name: Show image
+        run: |
+          docker image inspect \
+            rakeshbulli/aiopshub-backend:${{ inputs.version }}
+
+      - name: Verify image exists
+        run: |
+          docker image inspect \
+            rakeshbulli/aiopshub-backend:${{ inputs.version }} > /dev/null
+          echo "Rollback image verified: ${{ inputs.version }}"
+
+      - name: Rollback completed
+        run: |
+          echo "AIOpsHub rollback target: ${{ inputs.version }}"
+          echo "Docker image: rakeshbulli/aiopshub-backend:${{ inputs.version }}"
