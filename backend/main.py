@@ -505,4 +505,59 @@ def prometheus_metrics():
         "# TYPE aiopshub_network_usage gauge\n"
         f"aiopshub_network_usage {data['network_usage']}\n"
     )
+@app.post("/deployments/rollback")
+def rollback_deployment(
+    db: Session = Depends(get_db)
+):
+    failed_deployment = (
+        db.query(Deployment)
+        .filter(Deployment.status == "failed")
+        .order_by(Deployment.deployed_at.desc())
+        .first()
+    )
 
+    if not failed_deployment:
+        return {
+            "message": "No failed deployment found"
+        }
+
+    previous_deployment = (
+        db.query(Deployment)
+        .filter(
+            Deployment.application_name == failed_deployment.application_name,
+            Deployment.server_id == failed_deployment.server_id,
+            Deployment.status == "success"
+        )
+        .order_by(Deployment.deployed_at.desc())
+        .first()
+    )
+
+    if not previous_deployment:
+        return {
+            "message": "No previous successful deployment found"
+        }
+
+    rollback = Deployment(
+        server_id=previous_deployment.server_id,
+        application_name=previous_deployment.application_name,
+        version=previous_deployment.version,
+        status="rollback-success"
+    )
+
+    db.add(rollback)
+    db.commit()
+    db.refresh(rollback)
+
+    logger.info(
+        "Deployment rollback completed: %s -> %s",
+        failed_deployment.version,
+        previous_deployment.version
+    )
+
+    return {
+        "message": "Deployment rollback completed successfully",
+        "failed_version": failed_deployment.version,
+        "rollback_version": previous_deployment.version,
+        "rollback_deployment_id": rollback.id,
+        "status": rollback.status
+    }

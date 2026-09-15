@@ -13,7 +13,9 @@ services:
       - postgres_data:/var/lib/postgresql
 
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+    image: aiopshub-backend:${BACKEND_VERSION:-v1.0.0}
     container_name: aiopshub-backend
     depends_on:
       - db
@@ -43,6 +45,7 @@ services:
       - grafana_data:/var/lib/grafana
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
       - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+
   loki:
     image: grafana/loki:latest
     container_name: aiopshub-loki
@@ -52,6 +55,7 @@ services:
     volumes:
       - ./monitoring/loki/loki-config.yml:/etc/loki/loki-config.yml
       - loki_data:/loki
+
   alloy:
     image: grafana/alloy:latest
     container_name: aiopshub-alloy
@@ -68,8 +72,10 @@ services:
       - --server.http.listen-addr=0.0.0.0:12345
       - --storage.path=/var/lib/alloy/data
       - /etc/alloy/config.alloy
+
 volumes:
   postgres_data:
   grafana_data:
   loki_data:
   alloy_data:
+
